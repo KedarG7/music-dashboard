@@ -21,7 +21,7 @@ function useCarousel() {
 function Carousel({
   orientation = "horizontal",
   opts = {},
-  setApi = undefined,
+  setApi = /** @type {((api: import("embla-carousel").EmblaCarouselType) => void) | undefined} */ (undefined),
   plugins = undefined,
   className = "",
   children,

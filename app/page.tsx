@@ -55,6 +55,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Separator } from "@/components/ui/separator"
+import { academicsLinks } from "@/lib/academics"
 
 type CarouselController = {
   on: (event: "select", listener: () => void) => void
@@ -64,7 +65,7 @@ type CarouselController = {
 
 const navigationItems = [
   { title: "About us", href: "#why-sigce", icon: ShieldCheck, links: ["Why SIGCE", "Our values", "Leadership"] },
-  { title: "Academics", href: "#courses", icon: GraduationCap, links: ["Programs", "Academic calendar", "Examinations"] },
+  { title: "Academics", href: "/academics/academic-overview", icon: GraduationCap, links: academicsLinks.map((link) => link.title) },
   { title: "Departments", href: "#courses", icon: Building2, links: ["Computer engineering", "Artificial intelligence", "Mechanical engineering"] },
   { title: "Admissions", href: "#admissions", icon: BookOpen, links: ["How to apply", "Eligibility", "Fee structure"] },
   { title: "Students", href: "#testimonials", icon: Users, links: ["Student life", "Clubs & committees", "Student support"] },
@@ -227,7 +228,12 @@ export default function Page() {
                             <span className="rounded-lg bg-blue-50 p-2 text-blue-900"><Icon className="size-4" /></span>
                             <span className="text-sm font-semibold text-slate-900">{item.title}</span>
                           </div>
-                          {item.links.map((label) => (
+                          {item.title === "Academics" ? academicsLinks.map((link, index) => (
+                            <NavigationMenuLink key={link.href} href={link.href} className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-900 focus:bg-blue-50">
+                              <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-slate-100 text-[10px] font-semibold text-slate-500 transition-colors group-hover:bg-white group-hover:text-blue-800">{String(index + 1).padStart(2, "0")}</span>
+                              <span>{link.title}</span>
+                            </NavigationMenuLink>
+                          )) : item.links.map((label) => (
                             <NavigationMenuLink key={label} href={item.href} className="block rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-900">
                               {label}
                             </NavigationMenuLink>
@@ -271,7 +277,18 @@ export default function Page() {
             <div className="overflow-hidden">
               <div className="glass-panel mt-1 rounded-b-2xl border-t border-slate-100/80 px-2 py-3">
                 <div className="grid">
-                  {navigationItems.map((item, index) => (
+                  {navigationItems.map((item, index) => item.title === "Academics" ? (
+                    <div key={item.title} className="py-1">
+                      <p className="px-3 py-2 text-sm font-semibold text-[#102f63]">Academics</p>
+                      <div className="ml-3 grid border-l border-blue-100 pl-2">
+                        {academicsLinks.map((link) => (
+                          <Link key={link.href} href={link.href} tabIndex={mobileMenuOpen ? 0 : -1} onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-slate-600 transition hover:bg-blue-50 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-800/30">
+                            {link.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
                     <Link
                       key={item.title}
                       href={item.href}
